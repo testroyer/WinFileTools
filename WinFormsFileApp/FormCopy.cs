@@ -49,6 +49,12 @@ namespace WinFormsFileApp
                 }
             }
         }
+        /*
+        private async void SubDirectoryCheck(string[] directories , string pastePath)
+        {
+
+        }
+        */
 
         // What if there are folders in a folder ???
         private async Task<int> CopyAsync(string copyPath, string pastePath)
@@ -83,6 +89,18 @@ namespace WinFormsFileApp
                     }
                 }
             }
+            if (Directory.GetDirectories(copyPath).Length != 0)
+            {
+                string[] directories = Directory.GetDirectories(copyPath);
+                foreach (string directory in directories)
+                {
+                    string[] splittedDirectory = directory.Split(@"\");
+                    string newPastePath = pastePath + @"\" + splittedDirectory[splittedDirectory.Length - 1];
+                    Directory.CreateDirectory(newPastePath);
+                    await CopyAsync(directory, newPastePath);
+                }
+            }
+                
 
             return 0;
         }
